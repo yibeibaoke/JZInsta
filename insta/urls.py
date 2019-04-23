@@ -1,4 +1,4 @@
-"""JZInsta URL Configuration
+"""insta app url Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
@@ -14,9 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
+
+from insta.views import IndexView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('insta.urls')),
+    path('', IndexView.as_view(), name='index'),
 ]
