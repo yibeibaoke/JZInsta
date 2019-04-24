@@ -7,6 +7,8 @@
 {% block content %}
     {% if user.is_authenticated %}
         Hi {{ user.username }}!
+        follower: {{ user.get_number_of_followers }}
+        following: {{ user.get_number_of_following }}
         <p><a href="{% url 'logout' %}">logout</a></p>
     {% else %}
         <p>You are not logged in</p>
