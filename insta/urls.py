@@ -16,8 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from insta.views import IndexView
+from insta.views import IndexView, SignUp
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
+    path('auth/signup', SignUp.as_view(), name='signup'),
 ]
