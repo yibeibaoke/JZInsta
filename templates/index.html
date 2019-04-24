@@ -1,18 +1,35 @@
-<!DOCTYPE html>
-<html> 
-    <head>
-        <meta charset="utf-8">
-        <title>JZ Insta</title>
-    </head>
-    <body>
-        <main>
-            {% if user.is_authenticated %}
-                Hi {{ user.username }}!
-                <p><a href="{% url 'logout' %}">logout</a></p>
-            {% else %}
-                <p>You are not logged in</p>
-                <a href="{% url 'login' %}">login</a> | <a href="{% url 'signup' %}">signup</a>
-            {% endif %}
-        </main>
-    </body>    
-</html>
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Index{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        Hi {{ user.username }}!
+        <p><a href="{% url 'logout' %}">logout</a></p>
+    {% else %}
+        <p>You are not logged in</p>
+        <a href="{% url 'login' %}">login</a> | <a href="{% url 'signup' %}">signup</a>
+    {% endif %}
+    <li><a href="{% url 'makepost' %}">Make post</a></li>
+
+    <div>
+        {% for post in object_list %}
+            <div>
+                {% comment %} <a href="{% url 'profile' post.user_profile.user.username %}" class="poster__name">
+                    {% if post.author.profile_pic %}
+                    <img class="poster__profilepic" src="{{ post.user_profile.profile_pic.url }}">
+                    {% else %}
+                    <img class="poster__profilepic" src="{% static 'images/profile_placeholder.jpg' %}">
+                    {% endif %}
+                    {{ post.author.username }}
+                </a>
+                <span>
+                    {{ post.posted_on|timesince }}
+                </span> {% endcomment %}
+                <img src="{{ post.image }}">
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
