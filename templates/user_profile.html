@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load static custom_tags %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+
+<div>
+
+    <div>
+        {% if object.profile_pic %}
+            <img src="{{ object.profile_pic.url }}">
+        {% else %}
+            <img src="{% static 'images/profile_placeholder.jpg' %}" width="100" height="100">
+        {% endif %}
+    </div>
+
+    <div>
+        <h1>{{ object.username }}</h1>
+        {% if user == object %}
+            <button>Edit Profile</button>
+        {% else %}
+            {% is_following user object as following %}
+            <div class="follow-toggle__container">
+                <button class="btn btn-primary {% if not following %}follow-user{% else %}unfollow-user{% endif %}" id="{{ object.pk }}">
+                    {% if following %}
+                        Unfollow
+                    {% else %}
+                        Follow
+                    {% endif %}
+                </button>
+            </div>
+        {% endif %}
+    </div>
+        Posts: {{ object.posts.count }}
+        following: {{ object.get_connections.count }}
+        follower: {{ object.get_followers.count }}
+    <div>
+
+    </div>
+
+</div>
+
+{% endblock %}

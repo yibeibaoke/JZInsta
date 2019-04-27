@@ -10,6 +10,8 @@ pylint = "*"
 django = "*"
 pillow = "*"
 django-imagekit = "*"
+pylint-django = "*"
+django-annoying = "*"
 
 [requires]
 python_version = "3.7"

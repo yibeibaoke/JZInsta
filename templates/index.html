@@ -7,8 +7,8 @@
 {% block content %}
     {% if user.is_authenticated %}
         Hi {{ user.username }}!
-        follower: {{ user.get_number_of_followers }}
-        following: {{ user.get_number_of_following }}
+        following: {{ user.get_connections.count }}
+        follower: {{ user.get_followers.count }}
         <p><a href="{% url 'logout' %}">logout</a></p>
     {% else %}
         <p>You are not logged in</p>
@@ -19,18 +19,18 @@
     <div>
         {% for post in object_list %}
             <div>
-                {% comment %} <a href="{% url 'profile' post.user_profile.user.username %}" class="poster__name">
+                <a href="{% url 'profile' post.author.id %}">
                     {% if post.author.profile_pic %}
-                    <img class="poster__profilepic" src="{{ post.user_profile.profile_pic.url }}">
+                        <img src="{{ post.author.profile_pic.url }}">
                     {% else %}
-                    <img class="poster__profilepic" src="{% static 'images/profile_placeholder.jpg' %}">
+                        <img src="{% static 'images/profile_placeholder.jpg' %}" width="100" height="100">
                     {% endif %}
                     {{ post.author.username }}
                 </a>
                 <span>
                     {{ post.posted_on|timesince }}
-                </span> {% endcomment %}
-                <img src="{{ post.image }}">
+                </span>
+                <img src="{{ post.image.url }}" width="200" height="200">
             </div>
         {% endfor %}
     </div>

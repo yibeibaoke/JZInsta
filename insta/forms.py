@@ -15,7 +15,7 @@ class CustomUserChangeForm(UserChangeForm):
         model = InstaUser
         fields = ('username', 'email', )
 
-class PostPictureForm(ModelForm):
-    class Meta:
-        model = Post
-        fields = ['title', 'image', ]
+# class PostPictureForm(ModelForm):
+#     class Meta:
+#         model = Post
+#         fields = ['title', 'image', ]

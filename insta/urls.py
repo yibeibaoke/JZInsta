@@ -13,10 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import include, path
 
-from insta.views import IndexView, SignUp, MakePost
+from insta.views import IndexView, SignUp, MakePost, UserProfile, toggleFollow
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
@@ -24,4 +23,8 @@ urlpatterns = [
     path('post', MakePost.as_view(), name='makepost'),
 
     path('auth/signup', SignUp.as_view(), name='signup'),
+
+    path('profile/<int:pk>/', UserProfile.as_view(), name='profile'),
+
+    path('togglefollow', toggleFollow, name='togglefollow'),
 ]
