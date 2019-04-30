@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.urls import include, path
 
-from insta.views import IndexView, SignUp, MakePost, UserProfile, toggleFollow
+from insta.views import IndexView, SignUp, MakePost, UserProfile, toggleFollow, PostDetail, addLike, addComment
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
@@ -26,5 +26,11 @@ urlpatterns = [
 
     path('profile/<int:pk>/', UserProfile.as_view(), name='profile'),
 
+    path('post/<int:pk>/', PostDetail.as_view(), name='post'),
+
     path('togglefollow', toggleFollow, name='togglefollow'),
+
+    path('like', addLike, name='addLike'),
+
+    path('comment', addComment, name='addComment'),
 ]

@@ -1,9 +1,8 @@
 # TODO list
+- Explore
 
-- User Profile
-- Likes / Comments
-- Follow / Follower
+- Eidt Profile
+- Show followers
+- Show followings
 
 - Authorization
-
-- Styles

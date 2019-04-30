@@ -58,7 +58,34 @@ class Post(models.Model):
         blank=True,
         null=True,
         )
-    posted_on = models.DateTimeField(default=datetime.now)
+    # default=datetime.now
+    posted_on = models.DateTimeField(auto_now_add=True, editable=False)
 
     def __str__(self):
         return self.title
+
+    def get_like_count(self):
+        return self.likes.count()
+
+    def get_comment_count(self):
+        return self.comments.count()
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments',)
+    user = models.ForeignKey(InstaUser, on_delete=models.CASCADE)
+    comment = models.CharField(max_length=100)
+    posted_on = models.DateTimeField(auto_now_add=True, editable=False)
+
+    def __str__(self):
+        return self.comment
+
+
+class Like(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes',)
+    user = models.ForeignKey(InstaUser, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("post", "user")
+
+    def __str__(self):
+        return 'Like: ' + self.user.username + ' ' + self.post.title

@@ -33,11 +33,17 @@
             </div>
         {% endif %}
     </div>
+
+    <div>
         Posts: {{ object.posts.count }}
         following: {{ object.get_connections.count }}
         follower: {{ object.get_followers.count }}
-    <div>
+    </div>
 
+    <div>
+        {% for post in object.posts.all %}
+            <a href="{% url 'post' post.pk %}"><img src="http://{{ request.META.HTTP_HOST }}/{{post.image.url}}"  width="200" height="200"></a>
+        {% endfor %}
     </div>
 
 </div>
