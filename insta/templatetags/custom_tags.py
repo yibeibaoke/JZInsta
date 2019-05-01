@@ -1,6 +1,9 @@
 import re
+
 from django import template
-from django.urls import reverse, NoReverseMatch
+from django.urls import NoReverseMatch, reverse
+
+from insta.models import Like
 
 register = template.Library()
 
