@@ -3,41 +3,59 @@ from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, DetailView, ListView
 from annoying.decorators import ajax_request
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from insta.forms import CustomUserCreationForm
 from insta.models import InstaUser, Post, UserConnection, Like, Comment
 
 # Create your views here.
 
-class IndexView(ListView):
-    # model = Post.object.filter(title)
+class IndexView(LoginRequiredMixin, ListView):
     model = Post
     template_name = 'index.html'
+    login_url = 'login'
 
+    def get_queryset(self):
+        current_user = self.request.user
+        following = set()
+        for conn in UserConnection.objects.filter(creator=current_user).select_related('following'):
+            following.add(conn.following)
+        return Post.objects.filter(author__in=following)
 
 class SignUp(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
 
-
-class MakePost(CreateView):
+class MakePost(LoginRequiredMixin, CreateView):
     model = Post
     success_url = reverse_lazy('index')
     fields = ['title', 'image', ]
     template_name = 'make_post.html'
+    login_url = 'login'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-class PostDetail(DetailView):
+class PostDetail(LoginRequiredMixin, DetailView):
     model = Post
     template_name = 'post_detail.html'
+    login_url = 'login'
 
-class UserProfile(DetailView):
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        liked = Like.objects.filter(post=self.kwargs.get('pk'), user=self.request.user).first()
+        if liked:
+            data['liked'] = 1
+        else:
+            data['liked'] = 0
+        return data
+
+class UserProfile(LoginRequiredMixin, DetailView):
     model = InstaUser
     template_name = 'user_profile.html'
+    login_url = 'login'
 
 @ajax_request
 def toggleFollow(request):

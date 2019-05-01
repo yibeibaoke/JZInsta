@@ -6,3 +6,5 @@
 - Show followings
 
 - Authorization
+
+- Style
