@@ -8,7 +8,7 @@
     <div class="header">
       <a href="{% url 'profile' post.author.pk %}">
         {% if post.author.profile_pic %}
-          <img class="picture-circle--medium" src="{{ post.author.profile_pic.url }}">
+          <img class="picture-circle--medium" src="/{{ post.author.profile_pic.url }}">
         {% else %}
           <img class="picture-circle--medium" src="{% static 'images/profile_placeholder.jpg' %}">
         {% endif %}
@@ -16,7 +16,7 @@
       </a>
     </div>
     <div class="image__wrapper">
-      <img class="card__main-image" src="http://{{ request.META.HTTP_HOST }}/{{post.image.url}}" width='1000', height='1000'>
+      <img class="card__main-image" src="/{{post.image.url}}" width='1000', height='1000'>
     </div>
     <div class="comments-portion">
       <div class="likes-timestamp-row">

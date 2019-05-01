@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from imagekit.models import ProcessedImageField
@@ -27,6 +27,9 @@ class InstaUser(AbstractUser):
     def is_followed_by(self, user):
         followers = UserConnection.objects.filter(following=self)
         return followers.filter(creator=user).exists()
+
+    def get_absolute_url(self):
+        return reverse('profile', args=[str(self.id)])
 
     def __str__(self):
         return self.username

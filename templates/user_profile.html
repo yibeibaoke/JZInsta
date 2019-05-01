@@ -6,20 +6,22 @@
 
 {% block content %}
 
-<div>
+<div class="profile">
 
     <div>
         {% if object.profile_pic %}
-            <img src="{{ object.profile_pic.url }}">
+            <img class="picture-circle--medium" src="/{{object.profile_pic.url}}">
         {% else %}
-            <img src="{% static 'images/profile_placeholder.jpg' %}" width="100" height="100">
+            <img class="picture-circle--medium" src="{% static 'images/profile_placeholder.jpg' %}">
         {% endif %}
     </div>
 
     <div>
-        <h1>{{ object.username }}</h1>
+        <h1 class="username">{{ object.username }}</h1>
         {% if user == object %}
-            <button>Edit Profile</button>
+            <a class="edit-desktop" href="{% url 'editprofile' user.pk %}">
+                <button class="edit-profile">Edit Profile</button>
+            </a>
         {% else %}
             {% is_following user object as following %}
             <div class="follow-toggle__container">
@@ -35,15 +37,28 @@
     </div>
 
     <div>
-        Posts: {{ object.posts.count }}
-        following: {{ object.get_connections.count }}
-        follower: {{ object.get_followers.count }}
+        <ul class="stats">
+            <div class="col-xs-4"><li class="stats__count"><span>{{ object.posts.count }}</span><br> posts</li></div>
+            <div class="col-xs-4"><li class="stats__count"><span>{{ object.get_followers.count }}</span><br> followers</li></a></div>
+            <div class="col-xs-4"><li class="stats__count"><span>{{ object.get_connections.count }}</span><br> following</li></a></div>
+        </ul>
     </div>
 
-    <div>
+    <div class="profile__body">
+        <div class="row">
         {% for post in object.posts.all %}
-            <a href="{% url 'post' post.pk %}"><img src="http://{{ request.META.HTTP_HOST }}/{{post.image.url}}"  width="200" height="200"></a>
+            <div class="col-xs-4">
+                <div class="picture-square" style="background-image: url(/{{ post.image }}); background-size: contain;">
+                    <a href="{% url 'post' post.pk %}">
+                    <div class="content">
+                        <i class="fa fa-heart" aria-hidden="true"></i> {{ post.get_like_count }}
+                        <i class="fa fa-comment" aria-hidden="true"></i> {{ post.get_comment_count }}
+                    </div>
+                    </a>
+                </div>
+            </div>
         {% endfor %}
+        </div>
     </div>
 
 </div>

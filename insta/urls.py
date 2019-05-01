@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.urls import include, path
 
-from insta.views import (ExploreView, IndexView, MakePost, PostDetail, SignUp,
-                         UserProfile, addComment, addLike, toggleFollow)
+from insta.views import (EditProfile, ExploreView, IndexView, MakePost,
+                         PostDetail, SignUp, UserProfile, addComment, addLike,
+                         toggleFollow)
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
@@ -36,4 +37,6 @@ urlpatterns = [
     path('comment', addComment, name='addComment'),
 
     path('explore', ExploreView.as_view(), name='explore'),
+
+    path('profile/<int:pk>/edit/', EditProfile.as_view(), name='editprofile'),
 ]

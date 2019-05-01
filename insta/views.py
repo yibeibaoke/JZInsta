@@ -1,7 +1,7 @@
 from django.http import request
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from annoying.decorators import ajax_request
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -63,6 +63,12 @@ class PostDetail(LoginRequiredMixin, DetailView):
 class UserProfile(LoginRequiredMixin, DetailView):
     model = InstaUser
     template_name = 'user_profile.html'
+    login_url = 'login'
+
+class EditProfile(LoginRequiredMixin, UpdateView):
+    model = InstaUser
+    template_name = 'edit_profile.html'
+    fields = ['profile_pic', 'username']
     login_url = 'login'
 
 @ajax_request
