@@ -71,6 +71,32 @@ class EditProfile(LoginRequiredMixin, UpdateView):
     fields = ['profile_pic', 'username']
     login_url = 'login'
 
+class FollowerProfile(LoginRequiredMixin, ListView):
+    model = InstaUser
+    template_name = 'connections.html'
+    login_url = 'login'
+
+    def get_queryset(self):
+        user_pk = self.kwargs['pk']
+        this_user = InstaUser.objects.filter(pk=user_pk)
+        followers = set()
+        for conn in UserConnection.objects.filter(following__in=this_user):
+            followers.add(conn.creator.pk)
+        return InstaUser.objects.filter(pk__in=followers)
+
+class FollowingProfile(LoginRequiredMixin, ListView):
+    model = InstaUser
+    template_name = 'connections.html'
+    login_url = 'login'
+
+    def get_queryset(self):
+        following = set()
+        connection_set = UserConnection.objects.filter(creator__pk=self.kwargs['pk'])
+
+        for connection in connection_set:
+            following.add(connection.following.pk)
+        return InstaUser.objects.filter(pk__in=following)
+
 @ajax_request
 def toggleFollow(request):
     current_user = InstaUser.objects.get(pk=request.user.pk)
