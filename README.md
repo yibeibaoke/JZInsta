@@ -1,4 +1,1 @@
-# TODO list
-- Eidt Profile
-- Show followers
-- Show followings
+This project is made for teaching purpose, copyright belongs to Wen Tailai.
