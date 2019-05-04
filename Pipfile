@@ -12,6 +12,9 @@ pillow = "*"
 django-imagekit = "*"
 pylint-django = "*"
 django-annoying = "*"
+boto3 = "*"
+django-storages = "*"
+python-decouple = "*"
 
 [requires]
 python_version = "3.7"

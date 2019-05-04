@@ -1,17 +1,18 @@
-from django.http import request
-from django.shortcuts import render
-from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from annoying.decorators import ajax_request
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import request
+from django.shortcuts import render
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from insta.forms import CustomUserCreationForm
-from insta.models import InstaUser, Post, UserConnection, Like, Comment
+from insta.models import (Comment, InstaPost, InstaUser, Like, Post,
+                          UserConnection)
 
 # Create your views here.
 
 class IndexView(LoginRequiredMixin, ListView):
-    model = Post
+    model = InstaPost
     template_name = 'index.html'
     login_url = 'login'
 
@@ -20,20 +21,31 @@ class IndexView(LoginRequiredMixin, ListView):
         following = set()
         for conn in UserConnection.objects.filter(creator=current_user).select_related('following'):
             following.add(conn.following)
-        return Post.objects.filter(author__in=following)
+        return InstaPost.objects.filter(author__in=following)
 
 class ExploreView(LoginRequiredMixin, ListView):
-    model = Post
+    model = InstaPost
     template_name = 'explore.html'
     login_url = 'login'
 
     def get_queryset(self):
-        return Post.objects.all().order_by('-posted_on')[:20]
+        return InstaPost.objects.all().order_by('-posted_on')[:20]
 
 class SignUp(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
+
+class MakeInstaPost(LoginRequiredMixin, CreateView):
+    model = InstaPost
+    success_url = reverse_lazy('index')
+    fields = ['title', 'image',]
+    template_name = 'make_post.html'
+    login_url = 'login'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 class MakePost(LoginRequiredMixin, CreateView):
     model = Post
@@ -47,7 +59,7 @@ class MakePost(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 class PostDetail(LoginRequiredMixin, DetailView):
-    model = Post
+    model = InstaPost
     template_name = 'post_detail.html'
     login_url = 'login'
 
@@ -126,7 +138,7 @@ def toggleFollow(request):
 @ajax_request
 def addLike(request):
     post_pk = request.POST.get('post_pk')
-    post = Post.objects.get(pk=post_pk)
+    post = InstaPost.objects.get(pk=post_pk)
     try:
         like = Like(post=post, user=request.user)
         like.save()
@@ -146,7 +158,7 @@ def addLike(request):
 def addComment(request):
     comment_text = request.POST.get('comment_text')
     post_pk = request.POST.get('post_pk')
-    post = Post.objects.get(pk=post_pk)
+    post = InstaPost.objects.get(pk=post_pk)
     commenter_info = {}
 
     try:

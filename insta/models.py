@@ -45,6 +45,32 @@ class UserConnection(models.Model):
         on_delete=models.CASCADE,
         related_name="friend_set")
 
+class InstaPost(models.Model):
+    author = models.ForeignKey( # a foreign key indicate a Many-To-One relationship
+        InstaUser, #foreign key is InstaUser
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE, # delete this author will delete all his posts
+        related_name='insta_posts', # we can use author.posts to get all posts belong to this user
+        )
+    title = models.TextField(blank=True, null=True)
+    image = ProcessedImageField(
+        format='JPEG',
+        options={'quality': 100},
+        blank=True,
+        null=True,
+        )
+    posted_on = models.DateTimeField(auto_now_add=True, editable=False)
+
+    def __str__(self):
+        return self.title
+
+    def get_like_count(self):
+        return self.likes.count()
+
+    def get_comment_count(self):
+        return self.comments.count()
+
 class Post(models.Model):
     author = models.ForeignKey( # a foreign key indicate a Many-To-One relationship
         InstaUser, #foreign key is InstaUser
@@ -74,7 +100,7 @@ class Post(models.Model):
         return self.comments.count()
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments',)
+    post = models.ForeignKey(InstaPost, on_delete=models.CASCADE, related_name='comments',)
     user = models.ForeignKey(InstaUser, on_delete=models.CASCADE)
     comment = models.CharField(max_length=100)
     posted_on = models.DateTimeField(auto_now_add=True, editable=False)
@@ -84,7 +110,7 @@ class Comment(models.Model):
 
 
 class Like(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes',)
+    post = models.ForeignKey(InstaPost, on_delete=models.CASCADE, related_name='likes',)
     user = models.ForeignKey(InstaUser, on_delete=models.CASCADE)
 
     class Meta:

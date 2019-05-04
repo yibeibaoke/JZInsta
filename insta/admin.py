@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from insta.models import Post, InstaUser, UserConnection, Comment, Like
 from insta.forms import CustomUserChangeForm, CustomUserCreationForm
+from insta.models import (Comment, InstaPost, InstaUser, Like, Post,
+                          UserConnection)
 
 # Register your models here.
 
@@ -18,13 +19,14 @@ class CommentInline(admin.StackedInline):
 class LikeInline(admin.StackedInline):
     model = Like
 
-class PostAdmin(admin.ModelAdmin):
+class InstaPostAdmin(admin.ModelAdmin):
     inlines = [
         CommentInline,
         LikeInline,
     ]
 
-admin.site.register(Post, PostAdmin)
+admin.site.register(Post)
+admin.site.register(InstaPost, InstaPostAdmin)
 admin.site.register(InstaUser, InstaUserAdmin)
 admin.site.register(UserConnection)
 admin.site.register(Comment)

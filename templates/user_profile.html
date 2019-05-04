@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-xs-4 left">
                 {% if object.profile_pic %}
-                    <img class="picture-circle" src="/{{object.profile_pic.url}}">
+                    <img class="picture-circle" src="{{object.profile_pic.url}}">
                 {% else %}
                     <img class="picture-circle" src="{% static 'images/profile_placeholder.jpg' %}">
                 {% endif %}
@@ -40,7 +40,7 @@
 
                 <div>
                     <ul class="stats">
-                        <div class="col-xs-4"><li class="stats__count"><span>{{ object.posts.count }}</span><br> posts</li></div>
+                        <div class="col-xs-4"><li class="stats__count"><span>{{ object.insta_posts.count }}</span><br> posts</li></div>
                         <div class="col-xs-4"><a href="{% url 'follower' object.pk %}" style="text-decoration: none; color: black;"><li class="stats__count"><span>{{ object.get_followers.count }}</span><br> followers</li></a></div>
                         <div class="col-xs-4"><a href="{% url 'following' object.pk %}" style="text-decoration: none; color: black;"><li class="stats__count"><span>{{ object.get_connections.count }}</span><br> following</li></a></div>
                     </ul>
@@ -53,9 +53,9 @@
 
     <div class="profile__body">
         <div class="row">
-        {% for post in object.posts.all %}
+        {% for post in object.insta_posts.all %}
             <div class="col-xs-4">
-                <div class="picture-square" style="background-image: url(/{{ post.image }}); background-size: contain;">
+                <div class="picture-square" style="background-image: url({{ post.image.url }}); background-size: contain;">
                     <a href="{% url 'post' post.pk %}">
                     <div class="content">
                         <i class="fa fa-heart" aria-hidden="true"></i> {{ post.get_like_count }}

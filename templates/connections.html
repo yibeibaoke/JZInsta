@@ -10,7 +10,7 @@
   {% for object in object_list %}
     <div class="follow__card" id="{{ object.pk }}">
       {% if object.profile_pic %}
-        <img class="picture-circle--small" src="/{{ object.profile_pic.url }}">
+        <img class="picture-circle--small" src="{{ object.profile_pic.url }}">
       {% else %}
         <img class="picture-circle--small" src="{% static 'images/profile_placeholder.jpg' %}">
       {% endif %}

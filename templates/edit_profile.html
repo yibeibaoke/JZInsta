@@ -8,7 +8,7 @@
   <div class="col-xs-12">
     <div class="profile-pic-name">
       {% if user.profile_pic %}
-        <img class="picture-circle--medium" src="/{{user.profile_pic.url}}">
+        <img class="picture-circle--medium" src="{{user.profile_pic.url}}">
       {% else %}
         <img class="picture-circle--medium" src="{% static 'images/profile_placeholder.jpg' %}">
       {% endif %}
@@ -16,9 +16,7 @@
     </div>
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-
-        <form action="" method="post">{% csrf_token %}
-            {{ form.as_p }}
+        {{ form.as_p }}
         <input type="submit" value="Update" />
     </form>
   </div>

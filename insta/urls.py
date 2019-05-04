@@ -15,14 +15,15 @@ Including another URLconf
 """
 from django.urls import include, path
 
-from insta.views import (EditProfile, ExploreView, FollowerProfile, IndexView,
-                         MakePost, PostDetail, SignUp, UserProfile, addComment,
-                         addLike, toggleFollow, FollowingProfile)
+from insta.views import (EditProfile, ExploreView, FollowerProfile,
+                         FollowingProfile, IndexView, MakeInstaPost, MakePost,
+                         PostDetail, SignUp, UserProfile, addComment, addLike,
+                         toggleFollow)
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
 
-    path('post', MakePost.as_view(), name='makepost'),
+    path('post', MakeInstaPost.as_view(), name='makepost'),
 
     path('auth/signup', SignUp.as_view(), name='signup'),
 
